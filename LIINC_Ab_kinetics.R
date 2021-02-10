@@ -30,12 +30,12 @@ dat_visit %>%
 	pivot_longer(`N-Abbott`:`Neut-Monogram`, names_to="assay", values_to="response") %>%
 	mutate(assay = factor(assay)) -> dat_visit_long
 
-## Fit the basic lmer to each assay
+## Fit the lmer model to each assay
 dat_visit_long %>%
 	group_by(assay) %>%
 	nest() %>%
 	mutate(
-		fit = map(data, ~ lmer(response ~ days_since_seroconv + (1|participant_ID), data = .x)),
+		fit = map(data, ~ lmer(response ~ hosp + days_since_seroconv + (1|participant_ID), data = .x)),
 		tidied = map(fit, tidy)) %>% 
 	unnest(tidied) -> fit_lmer
 
@@ -63,7 +63,7 @@ for(i in 1:length(unique(dat_assays$assay))) {
 	## Get the data for a single assay
 	dat_visit_long_with_meta %>% filter(assay==as.character(unique(dat_assays$assay)[i])) -> dat_single
 	
-	## Fit the lmer including hosp as a fixed effect
+	## Fit the lmer model
 	fit_lmer_single <- lmer(response ~ -1 + hosp + days_since_seroconv + (1|participant_ID), data=dat_single)
 	
 	## Function to estimate time to sero-reversion
