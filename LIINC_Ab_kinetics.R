@@ -9,9 +9,9 @@ library(rstan)
 library(tibble)
 
 ## Read in the raw data
-dat_ind <- read_excel("Supplementary_Table_8.xlsx")
+dat_ind <- read_excel("Supplementary_Table_1_raw_data_patient_level.xlsx")
 
-dat_visit <- read_excel("Supplementary_Table_9.xlsx")
+dat_visit <- read_excel("Supplementary_Table_2_raw_data_sample_level.xlsx")
 
 ## ----transform-----------------------------------------------------------
 
