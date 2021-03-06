@@ -23,7 +23,7 @@ dat_visit <- read_excel(tmp_visit, sheet=1)
 
 ## ----transform-----------------------------------------------------------
 
-## Get the analytical scale from Table 1
+## Get the analytical scale from Supplementary Table 1
 trans_natural <- c("N-Abbott", "S-Ortho Ig", "S-Ortho IgG", "S-DiaSorin")
 trans_log <- c("N-Roche", "Neut-Monogram", "RBD-Split Luc", "N-Split Luc", "RBD-LIPS", "S-LIPS", "N-LIPS", "S-Lum", "RBD-Lum", "N(full)-Lum", "N(frag)-Lum")
 
@@ -52,14 +52,14 @@ dat_visit_long %>%
 data.frame(assay=levels(dat_visit_long$assay)) %>%
 	mutate(trans = ifelse(assay %in% trans_natural, "natural", "log")) -> dat_assays
 
-## Get the cutoff for positivity from Table 1
+## Get the cutoff for positivity from Supplementary Table 1
 dat_assays$cutoff <- c(1.4, 125000, 1, 83.1, 0.02684, 0.02473, 40, 52000, 0.0396, 45.9, 15, 45000, 0.0426, 1, 1)
 dat_assays %>% mutate(cutoff = ifelse(trans=="log", log(cutoff), cutoff)) -> dat_assays
 
 ## Add meta-data
 dat_visit_long %>%
 	left_join(dat_ind, by="participant_ID") %>%
-	mutate(hosp = ifelse(severity_class=="Symptomatic & hospitalized", 1, 0)) %>%
+	mutate(hosp = ifelse(hosp_status=="Yes", 1, 0)) %>%
 	mutate(hosp = factor(hosp)) -> dat_visit_long_with_meta
 
 ## To save output
@@ -91,7 +91,7 @@ for(i in 1:length(unique(dat_assays$assay))) {
 
 ## ----sensitivity---------------------------------------------------------
 
-## Get the specificity from Table 1
+## Get the specificity from Supplementary Table 1
 dat_assays$Sp <- c(1, 1, 0.998, 0.99, 1, 1, 0.988, 1, 1, 1, 0.993, 1, 1, 1, 1)
 
 ## To save output
