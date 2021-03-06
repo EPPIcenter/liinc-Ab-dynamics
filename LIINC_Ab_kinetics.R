@@ -9,9 +9,17 @@ library(rstan)
 library(tibble)
 
 ## Read in the raw data
-dat_ind <- read_excel("Supplementary_Table_1_raw_data_patient_level.xlsx")
+dat_ind_URL <- "https://www.medrxiv.org/content/medrxiv/early/2021/03/05/2021.03.03.21251639/DC12/embed/media-12.xlsx"
+dat_visit_URL <- "https://www.medrxiv.org/content/medrxiv/early/2021/03/05/2021.03.03.21251639/DC13/embed/media-13.xlsx"
 
-dat_visit <- read_excel("Supplementary_Table_2_raw_data_sample_level.xlsx")
+tmp_ind <- tempfile(fileext=".xlsx")
+tmp_visit <- tempfile(fileext=".xlsx")
+
+download.file(dat_ind_URL, destfile=tmp_ind, mode="wb")
+download.file(dat_visit_URL, destfile=tmp_visit, mode="wb")
+
+dat_ind <- read_excel(tmp_ind, sheet=1)
+dat_visit <- read_excel(tmp_visit, sheet=1)
 
 ## ----transform-----------------------------------------------------------
 
