@@ -47,7 +47,7 @@ dat_visit_long %>%
 	group_by(assay) %>%
 	nest() %>%
 	mutate(
-		fit = map(data, ~ lmer(response ~ hosp + days_since_seroconv + (1|participant_ID), data = .x)),
+		fit = map(data, ~ lmer(response ~ factor(hosp_status) + days_since_seroconv + (1|participant_ID), REML=TRUE, data = .x)),
 		tidied = map(fit, tidy)) %>% 
 	unnest(tidied) -> fit_lmer
 
@@ -76,7 +76,7 @@ for(i in 1:length(unique(dat_assays$assay))) {
 	dat_visit_long_with_meta %>% filter(assay==as.character(unique(dat_assays$assay)[i])) -> dat_single
 	
 	## Fit the lmer model
-	fit_lmer_single <- lmer(response ~ -1 + hosp + days_since_seroconv + (1|participant_ID), data=dat_single)
+	fit_lmer_single <- lmer(response ~ -1 + factor(hosp_status) + days_since_seroconv + (1|participant_ID), REML=TRUE, data=dat_single)
 	
 	## Function to estimate time to sero-reversion
 	func_days_to_reversion <- function(fitted_lmer_model, cut_point=as.numeric(dat_assays$cutoff[i])) {
