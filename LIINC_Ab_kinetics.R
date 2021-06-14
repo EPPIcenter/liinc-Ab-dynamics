@@ -62,7 +62,6 @@ dat_assays %>% mutate(cutoff = ifelse(trans=="log", log(cutoff), cutoff)) -> dat
 
 ## Add meta-data
 dat_visit_long %>%
-	left_join(dat_ind, by="participant_ID") %>%
 	mutate(hosp = ifelse(hosp_status=="Yes", 1, 0)) %>%
 	mutate(hosp = factor(hosp)) -> dat_visit_long_with_meta
 
