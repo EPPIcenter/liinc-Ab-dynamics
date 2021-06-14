@@ -86,7 +86,7 @@ for(i in 1:length(unique(dat_assays$assay))) {
 	}
 	
 	## Get bootstrap CIs
-	fit_days_to_reversion[[i]] <- bootstrapped_days_to_reversion <- bootMer(x=fit_lmer_single, FUN=func_days_to_reversion, nsim=1000)
+	fit_days_to_reversion[[i]] <- bootstrapped_days_to_reversion <- bootMer(x=fit_lmer_single, FUN=func_days_to_reversion, nsim=10000, type="semiparametric", use.u=TRUE
 	
 	fit_days_to_reversion_CI[[i]] <- confint(bootstrapped_days_to_reversion)
 	
