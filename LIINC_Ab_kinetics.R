@@ -29,6 +29,7 @@ trans_log <- c("N-Roche", "Neut-Monogram", "RBD-Split Luc", "N-Split Luc", "RBD-
 
 ## Transform the data
 dat_visit %>%
+	mutate(`N-Abbott` = ifelse(`N-Abbott`==0, 0.1, `N-Abbott`)) %>%
 	mutate_at(vars(contains(trans_log)), log) %>%
 	mutate(days_since_seroconv = days_since_onset-21) -> dat_visit
 
@@ -72,7 +73,9 @@ fit_days_to_reversion_CI <- vector(mode="list", length=nrow(dat_assays))
 for(i in 1:length(unique(dat_assays$assay))) {
 	
 	## Get the data for a single assay
-	dat_visit_long_with_meta %>% filter(assay==as.character(unique(dat_assays$assay)[i])) -> dat_single
+	dat_visit_long_with_meta %>%
+		filter(assay==as.character(unique(dat_assays$assay)[i])) %>%
+		filter(!is.na(response)) -> dat_single
 	
 	## Fit the lmer model
 	fit_lmer_single <- lmer(response ~ -1 + factor(hosp_status) + days_since_seroconv + (1|participant_ID), REML=TRUE, data=dat_single)
