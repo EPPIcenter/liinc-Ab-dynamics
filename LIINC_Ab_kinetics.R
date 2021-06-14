@@ -32,6 +32,10 @@ dat_visit %>%
 	mutate_at(vars(contains(trans_log)), log) %>%
 	mutate(days_since_seroconv = days_since_onset-21) -> dat_visit
 
+## Join with individual-level data
+dat_visit %>%
+	left_join(dat_ind, by="participant_ID") -> dat_visit
+
 ## ----mixed effects-------------------------------------------------------
 
 dat_visit %>%
