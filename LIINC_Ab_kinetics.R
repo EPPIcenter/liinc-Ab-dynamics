@@ -29,7 +29,7 @@ trans_log <- c("N-Roche", "Neut-Monogram", "RBD-Split Luc", "N-Split Luc", "RBD-
 
 ## Transform the data
 dat_visit %>%
-	mutate(`N-Abbott` = ifelse(`N-Abbott`==0, 0.1, `N-Abbott`)) %>%
+	mutate(`N-Abbott` = ifelse(`N-Abbott`==0, 0.01, `N-Abbott`)) %>%
 	mutate_at(vars(contains(trans_log)), log) %>%
 	mutate(days_since_seroconv = days_since_onset-21) -> dat_visit
 
