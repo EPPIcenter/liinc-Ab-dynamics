@@ -48,7 +48,7 @@ dat_visit_long %>%
 	group_by(assay) %>%
 	nest() %>%
 	mutate(
-		fit = map(data, ~ lmer(response ~ factor(hosp_status) + days_since_seroconv + (1|participant_ID), REML=TRUE, data = .x)),
+		fit = map(data, ~ lmer(response ~ -1 + factor(hosp_status) + days_since_seroconv + (1|participant_ID), REML=TRUE, data = .x)),
 		tidied = map(fit, tidy)) %>% 
 	unnest(tidied) -> fit_lmer
 
